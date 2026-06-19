@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gra</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="world"></canvas>
+
+  <section id="joinPanel" class="join-panel">
+    <div class="join-card">
+      <h1>Gra</h1>
+      <label>
+        Login
+        <input id="loginName" maxlength="24" autocomplete="username">
+      </label>
+      <label>
+        Hasło
+        <input id="loginPassword" type="password" minlength="4" autocomplete="current-password">
+      </label>
+      <label>
+        Nazwa
+        <input id="nationName" maxlength="24" autocomplete="off">
+      </label>
+      <label>
+        Kolor
+        <input id="nationColor" type="color" value="#22c55e">
+      </label>
+      <button id="joinButton">Zaloguj</button>
+      <button id="registerButton">Zarejestruj</button>
+    </div>
+  </section>
+
+  <header class="topbar">
+    <div>
+      <strong id="playerName">-</strong>
+      <span id="connection">łączenie...</span>
+    </div>
+    <div class="stats">
+      <span>Punkty: <b id="points">0</b></span>
+      <span>Siła: <b id="strength">0</b></span>
+      <span>Piksele: <b id="tiles">0</b></span>
+    </div>
+  </header>
+
+  <button id="mobileMenuButton" class="mobile-menu-button" aria-label="Menu">☰</button>
+
+  <aside class="sidebar">
+    <div class="panel">
+      <h2>Ranking</h2>
+      <ol id="leaderboard"></ol>
+    </div>
+    <div class="panel">
+      <h2>Ranking siły</h2>
+      <ol id="strengthLeaderboard"></ol>
+    </div>
+    <div class="panel">
+      <h2>Sojusze</h2>
+      <div id="alliances" class="empty">Brak sojuszy</div>
+    </div>
+  </aside>
+
+  <canvas id="minimap" width="180" height="120"></canvas>
+
+  <div id="actionMenu" class="action-menu hidden">
+    <strong id="targetName"></strong>
+    <button data-action="ally">Zaproponuj sojusz</button>
+    <button data-action="breakAlliance">Zerwij sojusz</button>
+    <button data-action="attack">Atakuj piksel</button>
+    <button data-action="upgrade">Wzmocnij piksel</button>
+    <button data-action="gift">Podaruj punkt</button>
+  </div>
+
+  <section id="pauseMenu" class="pause-menu hidden">
+    <div class="pause-card">
+      <h2>Menu gry</h2>
+      <div class="menu-grid">
+        <button id="resumeButton">Wróć</button>
+        <button id="centerButton">Centruj</button>
+        <button id="zoomInButton">Przybliż</button>
+        <button id="zoomOutButton">Oddal</button>
+        <button id="saveButton">Zapisz świat</button>
+        <button id="restartButton" class="danger-button">Restart gry</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="toastStack" class="toast-stack"></div>
+
+  <script src="client.js"></script>
+</body>
+</html>

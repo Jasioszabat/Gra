@@ -1,0 +1,153 @@
+{
+  "players": [
+    {
+      "id": "29e0b06c336bf690",
+      "name": "filip",
+      "color": "#ff0000",
+      "points": 14,
+      "strength": 2,
+      "tiles": 1,
+      "allies": [],
+      "online": false,
+      "conqueredBy": null,
+      "login": "filip",
+      "passwordSalt": "42b5a7d4124a69087bf44bdd7f5ea5b0",
+      "passwordHash": "ca8a49cf42343a37d854b61d71ac18aa768914f97b3857ff1439d66f148ca743"
+    },
+    {
+      "id": "e9be686e5a34b05b",
+      "name": "Jasioszabat",
+      "color": "#0400ff",
+      "points": 615,
+      "strength": 17,
+      "tiles": 16,
+      "allies": [],
+      "online": false,
+      "conqueredBy": null,
+      "login": "jasioszabat",
+      "passwordSalt": "c5912a983b2b745000a324aef8ae4cb0",
+      "passwordHash": "8a52f227210c28afe2ebbadba8de71360e310470d5f115207d6fd3aa7fd869ed"
+    }
+  ],
+  "cells": [
+    {
+      "x": 5,
+      "y": -6,
+      "owner": "29e0b06c336bf690",
+      "color": "#ff0000",
+      "defenseLevel": 0
+    },
+    {
+      "x": 1,
+      "y": -10,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 1,
+      "y": -9,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 2,
+      "y": -9,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 2,
+      "y": -10,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 3,
+      "y": -10,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 3,
+      "y": -9,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 4,
+      "y": -9,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 4,
+      "y": -10,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 4,
+      "y": -11,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 3,
+      "y": -11,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 2,
+      "y": -11,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 1,
+      "y": -11,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 1,
+      "y": -12,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 2,
+      "y": -12,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 3,
+      "y": -12,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    },
+    {
+      "x": 4,
+      "y": -12,
+      "owner": "e9be686e5a34b05b",
+      "color": "#0400ff",
+      "defenseLevel": 0
+    }
+  ]
+}
