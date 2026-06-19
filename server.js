@@ -14,6 +14,9 @@ const playerSockets = new Map();
 const players = new Map();
 const cells = new Map();
 const MAX_DEFENSE_LEVEL = 10;
+let saveTimer = null;
+let saving = false;
+let saveAgain = false;
 
 function cellKey(x, y) {
   return `${x},${y}`;
@@ -44,6 +47,17 @@ function publicCell(cell) {
 }
 
 function saveWorld() {
+  if (saveTimer) return;
+  saveTimer = setTimeout(flushWorldSave, 5000);
+}
+
+function flushWorldSave() {
+  saveTimer = null;
+  if (saving) {
+    saveAgain = true;
+    return;
+  }
+  saving = true;
   const activePlayers = [...players.values()].filter((player) => !player.conqueredBy && player.tiles > 0);
   const activePlayerIds = new Set(activePlayers.map((player) => player.id));
   const data = {
@@ -56,7 +70,40 @@ function saveWorld() {
     })),
     cells: [...cells.values()].filter((cell) => activePlayerIds.has(cell.owner)).map(publicCell),
   };
-  fs.writeFile(SAVE_FILE, JSON.stringify(data, null, 2), () => {});
+  const tempFile = `${SAVE_FILE}.tmp`;
+  fs.mkdir(path.dirname(SAVE_FILE), { recursive: true }, () => {
+    fs.writeFile(tempFile, JSON.stringify(data, null, 2), (writeError) => {
+      if (writeError) {
+        saving = false;
+        console.log("Nie udalo sie zapisac swiata.");
+        return;
+      }
+      fs.rename(tempFile, SAVE_FILE, () => {
+        saving = false;
+        if (saveAgain) {
+          saveAgain = false;
+          saveWorld();
+        }
+      });
+    });
+  });
+}
+
+function saveWorldNow() {
+  const activePlayers = [...players.values()].filter((player) => !player.conqueredBy && player.tiles > 0);
+  const activePlayerIds = new Set(activePlayers.map((player) => player.id));
+  const data = {
+    players: activePlayers.map((player) => ({
+      ...publicPlayer(player),
+      login: player.login || null,
+      passwordSalt: player.passwordSalt || null,
+      passwordHash: player.passwordHash || null,
+      online: false,
+    })),
+    cells: [...cells.values()].filter((cell) => activePlayerIds.has(cell.owner)).map(publicCell),
+  };
+  fs.mkdirSync(path.dirname(SAVE_FILE), { recursive: true });
+  fs.writeFileSync(SAVE_FILE, JSON.stringify(data, null, 2));
 }
 
 function loadWorld() {
@@ -784,5 +831,15 @@ function contentType(filePath) {
 }
 
 loadWorld();
+
+process.on("SIGINT", () => {
+  saveWorldNow();
+  process.exit(0);
+});
+
+process.on("SIGTERM", () => {
+  saveWorldNow();
+  process.exit(0);
+});
 
 server.listen(PORT, "0.0.0.0");
