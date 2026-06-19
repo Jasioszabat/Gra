@@ -18,6 +18,6 @@ primary_region = "fra"
   cpu_kind = "shared"
   cpus = 1
 
-[mounts]
+[[mounts]]
   source = "pixele_data"
   destination = "/data"

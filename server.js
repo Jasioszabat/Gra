@@ -5,7 +5,7 @@ const crypto = require("crypto");
 
 const PORT = Number(process.env.PORT || 3000);
 const ROOT = __dirname;
-const SAVE_FILE = path.join(ROOT, "world-save.json");
+const SAVE_FILE = process.env.SAVE_FILE || path.join(process.env.DATA_DIR || ROOT, "world-save.json");
 
 const sockets = new Map();
 const socketPlayers = new Map();
