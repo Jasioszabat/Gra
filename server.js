@@ -13,9 +13,8 @@ const playerSockets = new Map();
 const players = new Map();
 const cells = new Map();
 const MAX_DEFENSE_LEVEL = 10;
-let saveTimer = null;
 let saving = false;
-let saveAgain = false;
+let saveQueued = false;
 
 function cellKey(x, y) {
   return `${x},${y}`;
@@ -46,17 +45,16 @@ function publicCell(cell) {
 }
 
 function saveWorld() {
-  if (saveTimer) return;
-  saveTimer = setTimeout(flushWorldSave, 15000);
+  saveQueued = true;
 }
 
 function flushWorldSave() {
-  saveTimer = null;
+  if (!saveQueued) return;
   if (saving) {
-    saveAgain = true;
     return;
   }
   saving = true;
+  saveQueued = false;
   const activePlayers = [...players.values()].filter((player) => !player.conqueredBy && player.tiles > 0);
   const activePlayerIds = new Set(activePlayers.map((player) => player.id));
   const data = {
@@ -79,10 +77,6 @@ function flushWorldSave() {
       }
       fs.rename(tempFile, SAVE_FILE, () => {
         saving = false;
-        if (saveAgain) {
-          saveAgain = false;
-          saveWorld();
-        }
       });
     });
   });
@@ -704,6 +698,10 @@ setInterval(() => {
   saveWorld();
 }, 1000);
 
+setInterval(() => {
+  flushWorldSave();
+}, 5000);
+
 const server = http.createServer((req, res) => {
   const urlPath = req.url === "/" ? "/index.html" : decodeURIComponent(req.url.split("?")[0]);
   const filePath = path.normalize(path.join(ROOT, urlPath));
@@ -830,6 +828,14 @@ process.on("SIGINT", () => {
 process.on("SIGTERM", () => {
   saveWorldNow();
   process.exit(0);
+});
+
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught exception:", error);
+});
+
+process.on("unhandledRejection", (error) => {
+  console.error("Unhandled rejection:", error);
 });
 
 server.listen(PORT, "0.0.0.0");
