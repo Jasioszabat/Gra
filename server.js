@@ -487,6 +487,10 @@ function attackCell(player, x, y) {
     notice(player.id, "Nie możesz atakować sojusznika.");
     return;
   }
+  if (!isAdjacentToOwnedCell(player, x, y)) {
+    notice(player.id, "Mozesz atakowac tylko piksele stykajace sie bokiem z twoim panstwem.");
+    return;
+  }
   if (player.points < 3) {
     notice(player.id, "Atak kosztuje 3 punkty.");
     return;
@@ -585,21 +589,26 @@ function breakAlliance(player, targetId) {
   saveWorld();
 }
 
-function giftPoint(player, targetId) {
+function giftPoint(player, targetId, amount = 1) {
   if (player.conqueredBy) {
     notice(player.id, "Podbite państwo nie może przekazywać punktów.");
     return;
   }
   const target = players.get(targetId);
   if (!target || target.id === player.id) return;
-  if (player.points < 1) {
-    notice(player.id, "Nie masz punktu do podarowania.");
+  amount = Math.trunc(Number(amount));
+  if (!Number.isFinite(amount) || amount < 1) {
+    notice(player.id, "Podaj poprawna liczbe punktow.");
     return;
   }
-  player.points -= 1;
-  target.points += 1;
-  notice(player.id, `Przekazano 1 punkt do ${target.name}.`);
-  notice(target.id, `${player.name} przekazuje ci 1 punkt.`);
+  if (player.points < amount) {
+    notice(player.id, "Nie masz tylu punktow do podarowania.");
+    return;
+  }
+  player.points -= amount;
+  target.points += amount;
+  notice(player.id, `Przekazano ${amount} pkt do ${target.name}.`);
+  notice(target.id, `${player.name} przekazuje ci ${amount} pkt.`);
   updatePlayer(player);
   updatePlayer(target);
   saveWorld();
@@ -632,7 +641,7 @@ function handleMessage(id, raw) {
   if (message.type === "allyRequest") handleAllianceRequest(player, message.target);
   if (message.type === "allyResponse") handleAllianceResponse(player, message.from, Boolean(message.accepted));
   if (message.type === "breakAlliance") breakAlliance(player, message.target);
-  if (message.type === "gift") giftPoint(player, message.target);
+  if (message.type === "gift") giftPoint(player, message.target, message.amount);
   if (message.type === "chat") {
     const text = cleanText(message.text, 120);
     if (text) broadcast({ type: "chat", name: player.name, color: player.color, text });

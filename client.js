@@ -548,7 +548,16 @@ els.actionMenu.addEventListener("click", (event) => {
   if (button.dataset.action === "breakAlliance") send("breakAlliance", { target });
   if (button.dataset.action === "attack") send("attack", { x: state.selectedCell.x, y: state.selectedCell.y });
   if (button.dataset.action === "upgrade") send("upgrade", { x: state.selectedCell.x, y: state.selectedCell.y });
-  if (button.dataset.action === "gift") send("gift", { target });
+  if (button.dataset.action === "gift") {
+    const amountText = prompt("Ile punktow przekazac?", "1");
+    if (amountText === null) return;
+    const amount = Math.trunc(Number(amountText));
+    if (!Number.isFinite(amount) || amount < 1) {
+      toast("Podaj poprawna liczbe punktow.");
+      return;
+    }
+    send("gift", { target, amount });
+  }
   if (button.dataset.action === "message") {
     const player = state.players.get(target);
     if (els.chatInput) {
