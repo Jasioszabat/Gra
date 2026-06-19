@@ -6,6 +6,7 @@ const crypto = require("crypto");
 const PORT = Number(process.env.PORT || 3000);
 const ROOT = __dirname;
 const SAVE_FILE = process.env.SAVE_FILE || path.join(process.env.DATA_DIR || ROOT, "world-save.json");
+const BUNDLED_SAVE_FILE = path.join(ROOT, "world-save.json");
 
 const sockets = new Map();
 const socketPlayers = new Map();
@@ -59,6 +60,15 @@ function saveWorld() {
 }
 
 function loadWorld() {
+  if (!fs.existsSync(SAVE_FILE) && SAVE_FILE !== BUNDLED_SAVE_FILE && fs.existsSync(BUNDLED_SAVE_FILE)) {
+    try {
+      fs.mkdirSync(path.dirname(SAVE_FILE), { recursive: true });
+      fs.copyFileSync(BUNDLED_SAVE_FILE, SAVE_FILE);
+      console.log("Skopiowano zapis swiata na trwaly dysk.");
+    } catch {
+      console.log("Nie udalo sie skopiowac zapisu swiata na trwaly dysk.");
+    }
+  }
   if (!fs.existsSync(SAVE_FILE)) return;
   try {
     const data = JSON.parse(fs.readFileSync(SAVE_FILE, "utf8"));
