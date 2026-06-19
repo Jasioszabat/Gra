@@ -44,6 +44,7 @@ const state = {
   mouse: { x: 0, y: 0, worldX: 0, worldY: 0 },
   hoveredCell: null,
   selectedCell: null,
+  lastJoin: null,
   dragging: false,
   dragButton: 0,
   touch: {
@@ -166,6 +167,7 @@ function connect() {
   state.socket = new WebSocket(`${protocol}://${host}`);
   state.socket.addEventListener("open", () => {
     els.connection.textContent = "online";
+    if (state.lastJoin) send("join", state.lastJoin);
   });
   state.socket.addEventListener("close", () => {
     els.connection.textContent = "rozłączono, ponawiam...";
@@ -256,6 +258,7 @@ function joinGame(mode = "login") {
     localStorage.setItem("pixelNationName", name);
     localStorage.setItem("pixelNationColor", color);
   }
+  state.lastJoin = { mode: "login", login, password, name, color };
   els.joinPanel.classList.add("hidden");
   send("join", { mode, login, password, name, color });
 }

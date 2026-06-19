@@ -6,7 +6,6 @@ const crypto = require("crypto");
 const PORT = Number(process.env.PORT || 3000);
 const ROOT = __dirname;
 const SAVE_FILE = process.env.SAVE_FILE || path.join(process.env.DATA_DIR || ROOT, "world-save.json");
-const BUNDLED_SAVE_FILE = path.join(ROOT, "world-save.json");
 
 const sockets = new Map();
 const socketPlayers = new Map();
@@ -48,7 +47,7 @@ function publicCell(cell) {
 
 function saveWorld() {
   if (saveTimer) return;
-  saveTimer = setTimeout(flushWorldSave, 5000);
+  saveTimer = setTimeout(flushWorldSave, 15000);
 }
 
 function flushWorldSave() {
@@ -107,15 +106,6 @@ function saveWorldNow() {
 }
 
 function loadWorld() {
-  if (!fs.existsSync(SAVE_FILE) && SAVE_FILE !== BUNDLED_SAVE_FILE && fs.existsSync(BUNDLED_SAVE_FILE)) {
-    try {
-      fs.mkdirSync(path.dirname(SAVE_FILE), { recursive: true });
-      fs.copyFileSync(BUNDLED_SAVE_FILE, SAVE_FILE);
-      console.log("Skopiowano zapis swiata na trwaly dysk.");
-    } catch {
-      console.log("Nie udalo sie skopiowac zapisu swiata na trwaly dysk.");
-    }
-  }
   if (!fs.existsSync(SAVE_FILE)) return;
   try {
     const data = JSON.parse(fs.readFileSync(SAVE_FILE, "utf8"));
@@ -750,7 +740,7 @@ server.on("upgrade", (req, socket) => {
   ].join("\r\n"));
   const id = crypto.randomBytes(8).toString("hex");
   sockets.set(id, socket);
-  sendTo(id, {
+  sendToConnection(id, {
     type: "welcome",
     id,
     players: [...players.values()].map(publicPlayer),

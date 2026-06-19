@@ -3,3 +3,5 @@ npm-debug.log
 .git
 .gitignore
 fly.toml
+world-save.json
+world-save.json.tmp
