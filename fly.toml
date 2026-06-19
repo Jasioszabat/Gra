@@ -14,7 +14,7 @@ primary_region = "fra"
   processes = ["app"]
 
 [[vm]]
-  memory = "2048mb"
+  memory = "1024mb"
   cpu_kind = "shared"
   cpus = 1
 
